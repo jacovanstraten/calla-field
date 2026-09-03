@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f7a4d">
+<title>Calla Field App</title>
+<style>
+  :root{
+    --green:#1f7a4d; --green-d:#155c39; --orange:#e8722b; --bg:#f6f7f5; --card:#fff;
+    --ink:#1c2321; --muted:#5d6b64; --line:rgba(0,0,0,.09); --danger:#c62828; --ok:#2e7d32; --warn:#b26a00;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+  .app{max-width:640px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+  header{position:sticky;top:0;z-index:20;background:var(--green);color:#fff;display:flex;align-items:center;gap:10px;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));box-shadow:0 1px 4px rgba(0,0,0,.15)}
+  header .back{background:transparent;border:0;color:#fff;font-size:24px;line-height:1;padding:2px 6px;cursor:pointer;display:none}
+  header h1{font-size:18px;margin:0;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .accent{height:5px;background:linear-gradient(90deg,var(--green),var(--orange))}
+  main{flex:1;padding:16px;padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+  .screen{display:none}
+  .screen.active{display:block;animation:fade .15s ease}
+  @keyframes fade{from{opacity:.5}to{opacity:1}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin:0 0 12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  h2.section{font-size:13px;margin:16px 2px 8px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  label{display:block;font-size:13px;color:var(--muted);margin:0 0 4px;font-weight:600}
+  input,select,textarea{width:100%;font:inherit;padding:12px;border:1px solid #cbd2ce;border-radius:10px;background:#fff;color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--orange);outline-offset:-1px}
+  textarea{min-height:64px;resize:vertical}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}
+  .btn:active{transform:translateY(1px)}
+  .btn.secondary{background:#fff;color:var(--green-d);border:1.5px solid var(--green)}
+  .btn.ghost{background:#eaeeec;color:var(--ink)}
+  .btn.hero{padding:20px 16px;font-size:20px;flex-direction:column;gap:2px}
+  .btn.hero small{font-weight:500;font-size:12px;opacity:.9}
+  .btn.sm{width:auto;padding:9px 12px;font-size:14px;border-radius:10px}
+  .btn:disabled{opacity:.5}
+  .row{display:flex;gap:8px;align-items:center}
+  .row.wrap{flex-wrap:wrap}
+  .spacer{height:10px}
+  .muted{color:var(--muted)}
+  .kv{display:flex;gap:8px;padding:3px 0;font-size:15px}
+  .kv b{min-width:118px;color:var(--muted);font-weight:600}
+  .banner{border-radius:10px;padding:10px 12px;margin:0 0 12px;font-size:14px}
+  .banner.warn{background:#fff4e5;color:#7a4f00;border:1px solid #ffcf9e}
+  .banner.info{background:#e8f4ee;color:#0d4a30;border:1px solid #a7d3bc}
+  .pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:12px;background:#eceff1;color:#607d8b}
+  .pill.plants{background:#e6f3ea;color:var(--green-d)}
+  .pill.tubers{background:#fbe9dc;color:#a5521d}
+  .sample{display:flex;gap:8px;align-items:center;margin:0 0 8px}
+  .sample .idx{min-width:26px;color:var(--muted);font-size:13px;text-align:right}
+  .sample input{flex:1}
+  .stat{font-style:italic;font-size:14px;color:var(--muted);margin:4px 0 0}
+  .stat.total{font-style:normal;font-weight:700;color:var(--ink)}
+  .photos{display:flex;flex-wrap:wrap;gap:8px}
+  .thumb{width:92px;height:92px;border-radius:10px;object-fit:cover;border:1px solid var(--line)}
+  .addphoto{width:92px;height:92px;border-radius:10px;border:1.5px dashed var(--orange);background:#fdf5ef;color:var(--orange);font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .list-item{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;margin:0 0 8px;background:#fff}
+  .list-item .grow{flex:1;min-width:0}
+  .list-item .t{font-weight:700}
+  .list-item .s{font-size:13px;color:var(--muted)}
+  .seg{display:flex;border:1px solid #cbd2ce;border-radius:10px;overflow:hidden}
+  .seg button{flex:1;border:0;background:#fff;padding:10px 6px;font-weight:700;color:var(--muted);cursor:pointer;font-size:14px}
+  .seg button.on{background:var(--green);color:#fff}
+  .ind{font-weight:700;font-size:14px}
+  .ind.ok{color:var(--ok)} .ind.mid{color:var(--warn)} .ind.bad{color:var(--danger)}
+  #camWrap,#scanWrap{position:fixed;inset:0;background:#000;z-index:50;display:none;flex-direction:column}
+  #camWrap.on,#scanWrap.on{display:flex}
+  #camVideo,#scanVideo{flex:1;width:100%;object-fit:cover;background:#000}
+  .cambar{display:flex;gap:12px;align-items:center;justify-content:center;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom));background:#000}
+  .shutter{width:68px;height:68px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.4);cursor:pointer}
+  .camclose{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;background:rgba(0,0,0,.5);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:15px;z-index:2;cursor:pointer}
+  .scan-frame{position:absolute;top:0;left:0;right:0;bottom:80px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+  .scan-frame .box{width:70vw;max-width:300px;height:70vw;max-height:300px;border:3px solid var(--orange);border-radius:18px;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
+  .modal.on{display:flex}
+  .modal .box{background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:18px}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom));background:#222;color:#fff;padding:12px 16px;border-radius:12px;z-index:80;font-size:14px;max-width:90%;text-align:center;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.on{opacity:1}
+  hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="back" id="backBtn" aria-label="Back">‹</button>
+    <h1 id="title">Calla Field App</h1>
+    <button class="btn sm ghost" id="whoBtn" style="background:rgba(255,255,255,.16);color:#fff">👤</button>
+  </header>
+  <div class="accent"></div>
+  <main>
+    <!-- HOME -->
+    <section class="screen active" id="screen-home">
+      <div id="warnBanner"></div>
+      <button class="btn hero" id="btnScan">📷 Scan sub-batch<small>Camera reads the QR on the label</small></button>
+      <div class="spacer"></div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div><b>Work-list</b><div class="s muted" id="wlStatus">Not loaded yet</div></div>
+          <button class="btn secondary sm" id="btnLoadWl">Load</button>
+        </div>
+      </div>
+      <button class="btn ghost" id="btnBrowse">📋 Pick sub-batch from list</button>
+      <div class="spacer"></div>
+      <hr>
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div><b>In queue</b><div class="s muted" id="queueSub">0 observations</div></div>
+          <button class="btn ghost sm" id="btnQueue">View</button>
+        </div>
+      </div>
+      <button class="btn secondary" id="btnExport">⬆︎ Export &amp; send</button>
+      <div class="muted" id="exportNote" style="font-size:13px;margin:6px 2px"></div>
+      <p class="muted" style="font-size:12px;text-align:center;margin-top:22px">Calla Field App — preview (walking skeleton)<br><span id="verLabel"></span></p>
+    </section>
+
+    <!-- SUB-BATCH + OBSERVATION -->
+    <section class="screen" id="screen-sub">
+      <div class="card">
+        <div id="subTitle" style="font-size:20px;font-weight:700;margin-bottom:6px">Sub-batch</div>
+        <div id="subTop"></div>
+      </div>
+
+      <h2 class="section">Step</h2>
+      <div class="card">
+        <label>Choose the production step</label>
+        <select id="obStep"></select>
+        <div class="s muted" id="stepHint" style="margin-top:6px"></div>
+        <div class="row" style="justify-content:space-between;margin-top:8px">
+          <span class="muted" style="font-size:13px">Unit</span>
+          <span class="pill" id="unitPill">—</span>
+        </div>
+        <div class="spacer"></div>
+        <label>Count week (year-week)</label>
+        <input id="obWeek" placeholder="2026-W25">
+      </div>
+
+      <!-- plants block -->
+      <div id="blkPlants" style="display:none">
+        <h2 class="section">Count — plants</h2>
+        <div class="card">
+          <label>Number of pots (whole lot)</label>
+          <input id="obPots" inputmode="numeric" placeholder="e.g. 420">
+          <div class="spacer"></div>
+          <div class="row" style="justify-content:space-between">
+            <b>Plants per pot (sample)</b>
+            <div class="row">
+              <button class="btn ghost sm" id="pppAdd">＋</button>
+              <button class="btn ghost sm" id="pppRem">－</button>
+            </div>
+          </div>
+          <div id="pppRows" style="margin-top:8px"></div>
+          <div class="stat" id="pppStat">Mean: —   n: 0</div>
+          <div id="pppInd" class="ind" style="margin-top:4px"></div>
+          <div class="stat total" id="pppTotal" style="margin-top:6px"></div>
+        </div>
+      </div>
+
+      <!-- tubers block -->
+      <div id="blkTubers" style="display:none">
+        <h2 class="section">Count — tubers</h2>
+        <div class="card">
+          <label>Number of tubers (counted directly)</label>
+          <input id="obTubers" inputmode="numeric" placeholder="e.g. 23800">
+        </div>
+      </div>
+
+      <h2 class="section">Step status</h2>
+      <div class="card">
+        <div class="seg" id="obStatus">
+          <button data-st="">None</button>
+          <button data-st="Not ready">Not ready</button>
+          <button data-st="Ready">Ready</button>
+          <button data-st="Problem">Problem</button>
+        </div>
+      </div>
+
+      <h2 class="section">Note</h2>
+      <div class="card"><textarea id="obNote" placeholder="Disease / anomaly / remark (optional)"></textarea></div>
+
+      <h2 class="section">Photos <span class="pill" id="photoCount">0</span></h2>
+      <div class="card">
+        <div class="photos" id="photoStrip"><div class="addphoto" id="btnAddPhoto">＋</div></div>
+      </div>
+
+      <button class="btn" id="btnSaveObs">💾 Save observation</button>
+      <div class="spacer"></div>
+    </section>
+
+    <!-- BROWSE -->
+    <section class="screen" id="screen-browse">
+      <input id="browseSearch" placeholder="Search by sub-batch, variety or batch…" style="margin-bottom:12px">
+      <div id="browseList"></div>
+    </section>
+
+    <!-- QUEUE -->
+    <section class="screen" id="screen-queue">
+      <div id="queueList"></div>
+      <p class="muted" id="queueEmpty" style="text-align:center;display:none">Queue is empty.</p>
+    </section>
+  </main>
+</div>
+
+<!-- photo camera -->
+<div id="camWrap">
+  <button class="camclose" id="camClose">✕ Close</button>
+  <video id="camVideo" autoplay playsinline muted></video>
+  <div class="cambar"><button class="shutter" id="camShutter" aria-label="Photo"></button></div>
+</div>
+<!-- scan camera -->
+<div id="scanWrap">
+  <button class="camclose" id="scanClose">✕ Close</button>
+  <video id="scanVideo" autoplay playsinline muted></video>
+  <div class="scan-frame"><div class="box"></div></div>
+  <div class="cambar" style="flex-direction:column;gap:8px">
+    <div class="muted" style="color:#fff;font-size:13px">Scanner not working?</div>
+    <button class="btn ghost sm" id="scanManual">Enter code manually</button>
+  </div>
+</div>
+<!-- hidden native camera fallback -->
+<input id="nativeCam" type="file" accept="image/*" capture="environment" style="display:none">
+
+<!-- who modal -->
+<div class="modal" id="whoModal">
+  <div class="box">
+    <h3 style="margin:0 0 10px">Who are you?</h3>
+    <div class="muted" style="font-size:14px;margin-bottom:10px">Your name or initials are attached to every observation (the "Logged by" field).</div>
+    <input id="whoInput" placeholder="e.g. J. Field">
+    <div class="row" style="margin-top:14px;gap:10px">
+      <button class="btn" id="whoSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const APP_VERSION='2026-09-03 · skeleton r2';
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const el=(t,p={},kids=[])=>{const e=document.createElement(t);Object.assign(e,p);for(const k of [].concat(kids))if(k!=null)e.append(k);return e;};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),2600);}
+function pad(n,w=2){return String(n).padStart(w,'0');}
+function toNum(s){const v=parseFloat(String(s==null?'':s).trim().replace(',','.'));return isNaN(v)?0:v;}
+function nf(n){return (Math.round(n)).toLocaleString('en-US');}
+function mean(xs){return xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:0;}
+function stdev(xs){if(xs.length<=1)return 0;const m=mean(xs);let s=0;for(const x of xs)s+=(x-m)*(x-m);return Math.sqrt(s/(xs.length-1));}
+function sanitize(s){return (s||'').replace(/[^A-Za-z0-9 _-]/g,'_').trim();}
+function fmtDateTime(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());}
+function fmtYMD(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-day+3);const first=new Date(Date.UTC(t.getUTCFullYear(),0,4));const wk=1+Math.round(((t-first)/86400000-3+((first.getUTCDay()+6)%7))/7);return t.getUTCFullYear()+'-W'+pad(wk);}
+function weekNum(w){const m=String(w||'').match(/(\d{4})\D*W?(\d{1,2})/i);if(!m)return null;return (+m[1])*52+(+m[2]);}
+
+/* ---------- Regular step model ---------- */
+const REG_STEPS=[
+  {code:'SEE1',name:'Arrival',unit:'plants'},
+  {code:'SEE2',name:'Cultivation',unit:'plants'},
+  {code:'SEE3',name:'Harvest → T1',unit:'tubers'},
+  {code:'EE4',name:'Activation',unit:'tubers'},
+  {code:'EE5',name:'Micro-parting',unit:'tubers'},
+  {code:'EE6',name:'Cultivation',unit:'plants'},
+  {code:'EE7',name:'Harvest → T2',unit:'tubers'},
+  {code:'E8',name:'Activation',unit:'tubers'},
+  {code:'E9',name:'Micro-parting',unit:'tubers'},
+  {code:'E10',name:'Planting & cultivation',unit:'plants'},
+  {code:'E11',name:'Harvest → P1',unit:'tubers'},
+  {code:'E12',name:'Delivery',unit:'tubers'},
+];
+const REG_INDEX=new Map(REG_STEPS.map((s,i)=>[s.code,i]));
+const STEP_DUR={SEE1:1,SEE2:19,SEE3:7,EE4:7,EE5:0,EE6:19,EE7:9,E8:7,E9:0,E10:19,E11:9,E12:1};
+// Capture window per origin / product form. P1-recycle re-enters at the PLANTING step E10
+// (not at its harvest step E11), so the observable window is E10 → E11 → E12.
+const ORIGIN_WINDOW={
+  'E11':['E10','E11','E12'], 'P1':['E10','E11','E12'],
+  'EE7':['EE7','E8','E9','E10','E11','E12'], 'T2':['EE7','E8','E9','E10','E11','E12'],
+  'SEE3':['SEE3','EE4','EE5','EE6','EE7','E8','E9','E10','E11','E12'], 'T1':['SEE3','EE4','EE5','EE6','EE7','E8','E9','E10','E11','E12'],
+  'SEE1':REG_STEPS.map(s=>s.code), 'STANDARD':REG_STEPS.map(s=>s.code),
+};
+function stepsForSub(sub){
+  const type=(sub.type||'').toUpperCase();
+  if(type==='TV') return null; // TV: generic entry in this skeleton
+  const o=(sub.originStep||'').toUpperCase().trim();
+  let codes=ORIGIN_WINDOW[o];
+  if(!codes){ codes = REG_INDEX.has(o) ? REG_STEPS.slice(REG_INDEX.get(o)).map(s=>s.code) : REG_STEPS.map(s=>s.code); }
+  return codes.map(c=>REG_STEPS[REG_INDEX.get(c)]);
+}
+// Estimate the current step from the window start week + step durations.
+function currentStepCode(sub,steps){
+  if(!steps||!steps.length)return '';
+  const start=weekNum(sub.week); if(start==null)return steps[0].code;
+  let elapsed=weekNum(isoWeek(new Date()))-start;
+  if(elapsed<0)return steps[0].code;
+  for(const st of steps){const d=STEP_DUR[st.code]||0;if(elapsed<Math.max(d,1))return st.code;elapsed-=d;}
+  return steps[steps.length-1].code;
+}
+
+/* ---------- IndexedDB ---------- */
+const DB={_db:null};
+DB.open=()=>new Promise((res,rej)=>{const r=indexedDB.open('calla-field',1);
+  r.onupgradeneeded=()=>{const db=r.result;
+    if(!db.objectStoreNames.contains('kv'))db.createObjectStore('kv');
+    if(!db.objectStoreNames.contains('obs'))db.createObjectStore('obs',{keyPath:'id'});
+    if(!db.objectStoreNames.contains('photos'))db.createObjectStore('photos');};
+  r.onsuccess=()=>{DB._db=r.result;res();};r.onerror=()=>rej(r.error);});
+DB._s=(st,m)=>DB._db.transaction(st,m).objectStore(st);
+DB.get=(st,k)=>new Promise((res,rej)=>{const q=DB._s(st,'readonly').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});
+DB.set=(st,k,v)=>new Promise((res,rej)=>{const s=DB._s(st,'readwrite');const q=(st==='obs')?s.put(v):s.put(v,k);q.onsuccess=()=>res();q.onerror=()=>rej(q.error);});
+DB.del=(st,k)=>new Promise((res,rej)=>{const q=DB._s(st,'readwrite').delete(k);q.onsuccess=()=>res();q.onerror=()=>rej(q.error);});
+DB.all=st=>new Promise((res,rej)=>{const q=DB._s(st,'readonly').getAll();q.onsuccess=()=>res(q.result||[]);q.onerror=()=>rej(q.error);});
+
+/* ---------- state ---------- */
+let WORKLIST={rows:[],index:new Map(),name:'',loadedAt:''};
+let OPERATOR='';
+let DEVICE_ID='';
+let cur={sub:null,code:''};
+let form={ppp:[],photos:[],status:''};
+
+/* ---------- CSV parse ---------- */
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF)text=text.slice(1);
+  const first=(text.split(/\r?\n/).find(l=>l.trim())||'');
+  const delim=((first.match(/;/g)||[]).length>(first.match(/,/g)||[]).length)?';':',';
+  const rows=[];let f='',row=[],q=false;
+  for(let i=0;i<text.length;i++){const c=text[i];
+    if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++;}else q=false;}else f+=c;}
+    else{if(c==='"')q=true;else if(c===delim){row.push(f);f='';}else if(c==='\n'){row.push(f);rows.push(row);row=[];f='';}else if(c==='\r'){}else f+=c;}}
+  if(f.length||row.length){row.push(f);rows.push(row);}
+  const data=rows.filter(r=>r.some(v=>String(v).trim()!==''));
+  if(!data.length)return {headers:[],rows:[]};
+  const headers=data[0].map(h=>String(h).trim());
+  const out=[];
+  for(let i=1;i<data.length;i++){const m={};let any=false;for(let c=0;c<headers.length&&c<data[i].length;c++){const v=String(data[i][c]).trim();m[headers[c]]=v;if(v)any=true;}if(any)out.push(m);}
+  return {headers,rows:out};
+}
+function pick(r,keys){for(const k of keys){for(const rk in r){if(rk.toLowerCase()===k.toLowerCase()&&String(r[rk]).trim())return String(r[rk]).trim();}}return '';}
+function mapSub(r){
+  return {
+    id:pick(r,['Sub-batch ID','Sub batch ID','sub_batch_id','SubBatchID']),
+    parent:pick(r,['Parent Batch','parent_batch','Planning ID']),
+    variety:pick(r,['Variety Name','Variety','variety_name']),
+    type:pick(r,['Type']),
+    originStep:pick(r,['Origin Step','origin_step']),
+    form:pick(r,['Product Form','product_form','Form']),
+    eye:pick(r,['Eye Type','eye_type','Eye']),
+    background:pick(r,['Background']),
+    pots:pick(r,['#Pots','Pots','pots']),
+    density:pick(r,['Plant Density','Density','density']),
+    p0:pick(r,['#Plants (P0)','Plants P0','plants_p0']),
+    mf:pick(r,['MF','mf']),
+    week:pick(r,['Planting Year-Week','Planting Week','planting_week']),
+    status:pick(r,['Status']),
+  };
+}
+async function loadWorklistText(text,name){
+  const p=parseCSV(text);
+  if(!p.rows.length){toast('No rows found in the file');return false;}
+  const rows=p.rows.map(mapSub).filter(s=>s.id);
+  if(!rows.length){toast('Column "Sub-batch ID" not found');return false;}
+  WORKLIST={rows,index:new Map(rows.map(s=>[s.id,s])),name:name||'worklist.csv',loadedAt:new Date().toISOString()};
+  await DB.set('kv','worklist',{rows,name:WORKLIST.name,loadedAt:WORKLIST.loadedAt});
+  return true;
+}
+async function loadWorklistFromStore(){const s=await DB.get('kv','worklist');if(s&&s.rows){WORKLIST={rows:s.rows,index:new Map(s.rows.map(r=>[r.id,r])),name:s.name||'',loadedAt:s.loadedAt||''};}}
+
+/* ---------- nav ---------- */
+const stack=['home'];
+const TITLES={home:'Calla Field App',sub:'Observation',browse:'Sub-batches',queue:'Queue'};
+function render(name){$$('.screen').forEach(s=>s.classList.remove('active'));const scr=$('#screen-'+name);if(scr)scr.classList.add('active');$('#title').textContent=TITLES[name]||'Calla';$('#backBtn').style.display=stack.length>1?'block':'none';$('#whoBtn').style.display=name==='home'?'block':'none';window.scrollTo(0,0);}
+function show(name,push=true){if(push&&stack[stack.length-1]!==name){stack.push(name);history.pushState({s:name},'');}render(name);}
+function back(){history.back();}
+$('#backBtn').onclick=back;
+window.addEventListener('popstate',()=>{
+  if($('#camWrap').classList.contains('on')){closeCam();history.pushState({},'');return;}
+  if($('#scanWrap').classList.contains('on')){stopScan();history.pushState({},'');return;}
+  if($('#whoModal').classList.contains('on')){$('#whoModal').classList.remove('on');history.pushState({},'');return;}
+  if(stack.length>1){stack.pop();render(stack[stack.length-1]);refreshHome();}else{history.pushState({s:'home'},'');}
+});
+
+/* ---------- home ---------- */
+async function refreshHome(){
+  if(WORKLIST.rows.length){const days=WORKLIST.loadedAt?Math.floor((Date.now()-new Date(WORKLIST.loadedAt))/86400000):0;$('#wlStatus').textContent=WORKLIST.name+' — '+WORKLIST.rows.length+' sub-batches'+(WORKLIST.loadedAt?(' · '+(days<=0?'today':days+'d ago')):'');}
+  else $('#wlStatus').textContent='Not loaded yet';
+  const obs=await DB.all('obs');let photos=0;obs.forEach(o=>photos+=(o.photos||[]).length);
+  $('#queueSub').textContent=obs.length+' observation'+(obs.length===1?'':'s')+(photos?(' · '+photos+' photo'+(photos===1?'':'s')):'');
+  $('#btnExport').disabled=!obs.length;
+  $('#exportNote').textContent=obs.length?('Ready to send: '+obs.length+' observation(s), '+photos+' photos'):'';
+  $('#warnBanner').innerHTML=OPERATOR?'':'<div class="banner warn">Enter your name first (👤 top right) — it is attached to every observation.</div>';
+}
+$('#btnLoadWl').onclick=()=>pickFile('.csv,text/csv',async f=>{if(await loadWorklistText(await f.text(),f.name)){toast('Work-list loaded');refreshHome();}});
+$('#btnBrowse').onclick=()=>{if(!WORKLIST.rows.length){toast('Load a work-list first');return;}buildBrowse();show('browse');};
+$('#btnQueue').onclick=()=>{buildQueue();show('queue');};
+$('#btnExport').onclick=exportPackage;
+$('#btnScan').onclick=startScan;
+function pickFile(accept,cb){const inp=el('input',{type:'file',accept});inp.style.display='none';inp.onchange=()=>{if(inp.files[0])cb(inp.files[0]);inp.remove();};document.body.append(inp);inp.click();}
+
+/* ---------- who ---------- */
+$('#whoBtn').onclick=()=>{$('#whoInput').value=OPERATOR;$('#whoModal').classList.add('on');};
+$('#whoSave').onclick=async()=>{OPERATOR=$('#whoInput').value.trim();await DB.set('kv','operator',OPERATOR);$('#whoModal').classList.remove('on');refreshHome();toast(OPERATOR?('Hi '+OPERATOR):'Name cleared');};
+
+/* ---------- scan ---------- */
+let scanStream=null,scanRAF=null,detector=null;
+async function startScan(){
+  if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('Live scanning needs an https page — enter the code manually');manualCode();return;}
+  try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});}
+  catch(e){toast('Camera unavailable — enter manually');manualCode();return;}
+  const v=$('#scanVideo');v.srcObject=scanStream;$('#scanWrap').classList.add('on');await v.play().catch(()=>{});
+  if('BarcodeDetector' in window){try{detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13','data_matrix']});}catch(e){detector=null;}}
+  if(detector)scanLoop();else toast('QR detection not supported — use manual entry');
+}
+async function scanLoop(){if(!scanStream)return;const v=$('#scanVideo');try{if(v.readyState>=2){const codes=await detector.detect(v);if(codes&&codes.length){const raw=(codes[0].rawValue||'').trim();if(raw){stopScan();onCode(raw);return;}}}}catch(e){}scanRAF=requestAnimationFrame(scanLoop);}
+function stopScan(){if(scanRAF)cancelAnimationFrame(scanRAF);scanRAF=null;if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}$('#scanWrap').classList.remove('on');}
+$('#scanClose').onclick=stopScan;
+$('#scanManual').onclick=()=>{stopScan();manualCode();};
+function manualCode(){const c=prompt('Sub-batch code:');if(c&&c.trim())onCode(c.trim());}
+function onCode(raw){
+  let code=raw;const m=raw.match(/\d+-\d{4}-\d+/);if(m)code=m[0];
+  const sub=WORKLIST.index.get(code)||WORKLIST.index.get(raw);
+  if(sub)openSub(sub);
+  else openSub({id:code,parent:'',variety:'',type:'',originStep:'',form:'',eye:'',background:'',pots:'',density:'',p0:'',mf:'',week:'',status:'',_notfound:true});
+}
+
+/* ---------- browse ---------- */
+function buildBrowse(){
+  const q=($('#browseSearch').value||'').toLowerCase();const list=$('#browseList');list.innerHTML='';let n=0;
+  for(const s of WORKLIST.rows){
+    const hay=(s.id+' '+s.variety+' '+s.parent).toLowerCase();
+    if(q&&!hay.includes(q))continue;if(++n>400)break;
+    const item=el('div',{className:'list-item'});
+    const g=el('div',{className:'grow'});
+    g.append(el('div',{className:'t',textContent:s.id}),el('div',{className:'s',textContent:[s.variety,s.type,s.form,s.eye].filter(Boolean).join(' · ')}));
+    item.append(g,el('button',{className:'btn ghost sm',textContent:'Open',onclick:()=>openSub(s)}));
+    list.append(item);
+  }
+  if(!n)list.append(el('p',{className:'muted',textContent:'No results.'}));
+}
+$('#browseSearch').oninput=buildBrowse;
+
+/* ---------- sub-batch + observation form ---------- */
+function kvEl(k,v){const d=el('div',{className:'kv'});d.append(el('b',{textContent:k}),el('span',{textContent:v}));return d;}
+function openSub(sub){
+  cur={sub,code:sub.id};
+  form={ppp:[],photos:[],status:''};
+  $('#subTitle').textContent=sub.id||'Sub-batch';
+  const top=$('#subTop');top.innerHTML='';
+  if(sub._notfound)top.append(el('div',{className:'banner warn',textContent:'Not in the work-list — you can still record; the code is saved.'}));
+  else{
+    if(sub.variety)top.append(kvEl('Variety',sub.variety));
+    if(sub.parent)top.append(kvEl('Batch',sub.parent));
+    const line=[sub.type,sub.form,sub.eye,sub.background].filter(Boolean).join(' · ');if(line)top.append(kvEl('Kind',line));
+    if(sub.originStep)top.append(kvEl('Origin',sub.originStep));
+    if(sub.pots)top.append(kvEl('#Pots (plan)',sub.pots));
+    if(sub.density)top.append(kvEl('Density (plan)',sub.density));
+    if(sub.week)top.append(kvEl('Planting week',sub.week));
+  }
+  const sel=$('#obStep');sel.innerHTML='';
+  const steps=stepsForSub(sub);
+  let curStep='';
+  if(steps){
+    curStep=currentStepCode(sub,steps);
+    for(const st of steps)sel.append(el('option',{value:st.code,textContent:st.code+' — '+st.name+' ('+(st.unit==='plants'?'plants':'tubers')+')'+(st.code===curStep?'  ⬅ current':'')}));
+    if(curStep)sel.value=curStep;
+    $('#stepHint').textContent=curStep?('Defaulted to the current step (estimate from planting week).'):'';
+  }else{
+    sel.append(el('option',{value:'',textContent:'— choose or type a step —'}));
+    for(const st of REG_STEPS)sel.append(el('option',{value:st.code,textContent:st.code+' — '+st.name}));
+    $('#stepHint').textContent='TV batch — simplified step list in this preview.';
+  }
+  sel.onchange=onStepChange;
+  $('#obWeek').value=isoWeek(new Date());
+  $('#obNote').value='';$('#obPots').value='';$('#obTubers').value='';
+  setStatus('');
+  onStepChange();
+  renderPhotos();
+  show('sub');
+}
+function currentUnit(){
+  const code=$('#obStep').value;
+  const st=REG_STEPS[REG_INDEX.get(code)];
+  return st?st.unit:'tubers';
+}
+function onStepChange(){
+  const unit=currentUnit();
+  $('#unitPill').textContent=unit==='plants'?'plants':'tubers';
+  $('#unitPill').className='pill '+(unit==='plants'?'plants':'tubers');
+  $('#blkPlants').style.display=unit==='plants'?'':'none';
+  $('#blkTubers').style.display=unit==='tubers'?'':'none';
+  if(unit==='plants'&&!form.ppp.length)form.ppp=[''];
+  renderPpp();
+}
+function renderPpp(){
+  const wrap=$('#pppRows');wrap.innerHTML='';
+  form.ppp.forEach((val,i)=>{
+    const s=el('div',{className:'sample'});
+    const inp=el('input',{value:val,inputMode:'decimal',placeholder:'e.g. 12'});
+    inp.oninput=()=>{form.ppp[i]=inp.value;pppStat();};
+    s.append(el('div',{className:'idx',textContent:'#'+(i+1)}),inp);wrap.append(s);
+  });
+  if(!form.ppp.length)wrap.append(el('div',{className:'muted',style:'font-size:14px',textContent:'No counts yet — tap ＋'}));
+  pppStat();
+}
+function pppStat(){
+  const xs=form.ppp.map(toNum).filter(x=>x>0);
+  const m=mean(xs),sd=stdev(xs);
+  $('#pppStat').textContent=xs.length?('Mean: '+m.toFixed(1)+'   SD: '+sd.toFixed(2)+'   n: '+xs.length):'Mean: —   n: 0';
+  const dens=toNum(cur.sub&&cur.sub.density);const ind=$('#pppInd');
+  if(xs.length&&dens>0){const pct=m/dens*100;let cls='ok',t='✅';if(pct<80){cls='bad';t='❌';}else if(pct<95){cls='mid';t='⚠️';}ind.className='ind '+cls;ind.textContent=t+' '+pct.toFixed(0)+'% of plan density ('+dens+')';}
+  else ind.textContent='';
+  const pots=toNum($('#obPots').value);const tot=$('#pppTotal');
+  if(xs.length&&pots>0){const total=pots*m;const sdTotal=sd*Math.sqrt(pots);tot.textContent='Total plants ≈ '+nf(total)+'   (± est. SD '+nf(sdTotal)+')';}
+  else tot.textContent='';
+}
+$('#obPots').oninput=pppStat;
+$('#pppAdd').onclick=()=>{form.ppp.push('');renderPpp();};
+$('#pppRem').onclick=()=>{form.ppp.pop();renderPpp();};
+function setStatus(st){form.status=st;$$('#obStatus button').forEach(b=>b.classList.toggle('on',b.dataset.st===st));}
+$$('#obStatus button').forEach(b=>b.onclick=()=>setStatus(b.dataset.st));
+
+/* ---------- photos ---------- */
+function renderPhotos(){
+  const strip=$('#photoStrip');strip.innerHTML='';
+  form.photos.forEach((p,i)=>{const img=el('img',{className:'thumb',src:p.thumb});img.onclick=()=>{if(confirm('Delete photo?')){DB.del('photos',p.key);form.photos.splice(i,1);renderPhotos();}};strip.append(img);});
+  strip.append(el('div',{className:'addphoto',textContent:'＋',onclick:takePhoto}));
+  $('#photoCount').textContent=form.photos.length;
+}
+let camStream=null;
+async function takePhoto(){
+  if(window.isSecureContext&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+    try{camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:2400},height:{ideal:3200}}});
+      const v=$('#camVideo');v.srcObject=camStream;$('#camWrap').classList.add('on');await v.play().catch(()=>{});return;}
+    catch(e){}
+  }
+  $('#nativeCam').value='';$('#nativeCam').click();
+}
+function closeCam(){if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}$('#camWrap').classList.remove('on');}
+$('#camClose').onclick=closeCam;
+$('#camShutter').onclick=async()=>{
+  const v=$('#camVideo');const vw=v.videoWidth,vh=v.videoHeight;if(!vw){toast('Camera not ready yet');return;}
+  const cv=el('canvas');cv.width=vw;cv.height=vh;cv.getContext('2d').drawImage(v,0,0,vw,vh);
+  await finishPhoto(cv);closeCam();
+};
+$('#nativeCam').onchange=async e=>{
+  const file=e.target.files&&e.target.files[0];if(!file)return;
+  const img=await blobToImage(file);const cv=el('canvas');cv.width=img.naturalWidth;cv.height=img.naturalHeight;cv.getContext('2d').drawImage(img,0,0);
+  await finishPhoto(cv);
+};
+function blobToImage(blob){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=URL.createObjectURL(blob);});}
+async function finishPhoto(cv){
+  drawOverlay(cv.getContext('2d'),cv.width,cv.height);
+  const blob=await new Promise(r=>cv.toBlob(r,'image/jpeg',0.85));
+  const key='ph_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);
+  await DB.set('photos',key,blob);
+  const t=el('canvas');const s=Math.min(1,200/cv.width);t.width=cv.width*s;t.height=cv.height*s;t.getContext('2d').drawImage(cv,0,0,t.width,t.height);
+  form.photos.push({key,thumb:t.toDataURL('image/jpeg',0.6)});renderPhotos();toast('Photo added');
+}
+function drawOverlay(ctx,w,h){
+  const s=cur.sub;const lines=[
+    'Sub-batch: '+s.id+(s.variety?('  |  '+s.variety):'')+(s.eye?('  ('+s.eye+(s.background?', '+s.background:'')+')'):''),
+    (s.parent?('Batch: '+s.parent+'   '):'')+'Step: '+($('#obStep').value||'-'),
+    fmtDateTime(new Date()),
+  ].filter(Boolean);
+  const fontPx=Math.max(18,Math.round(h*0.028));const padx=Math.round(Math.min(Math.max(h*0.02,14),40));
+  ctx.font='700 '+fontPx+'px sans-serif';ctx.textBaseline='top';
+  const lineH=fontPx+Math.round(fontPx*0.3);const stripH=lines.length*lineH+2*padx;
+  ctx.fillStyle='rgba(0,0,0,0.82)';ctx.fillRect(0,h-stripH,w,stripH);ctx.fillStyle='#fff';
+  lines.forEach((ln,i)=>ctx.fillText(ln,padx,h-stripH+padx+i*lineH));
+}
+
+/* ---------- save observation ---------- */
+$('#btnSaveObs').onclick=async()=>{
+  const step=$('#obStep').value;
+  if(!step){toast('Choose a step first');return;}
+  if(!OPERATOR){toast('Enter your name first (👤)');return;}
+  const unit=currentUnit();
+  const rec={
+    id:'obs_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+    clientKey:DEVICE_ID+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,8),
+    subId:cur.sub.id, parent:cur.sub.parent||'', variety:cur.sub.variety||'',
+    step, unit, week:$('#obWeek').value.trim(),
+    pots:'', plantsPerPot:'', tubers:'',
+    status:form.status, note:$('#obNote').value.trim(),
+    dateLogged:fmtDateTime(new Date()), loggedBy:OPERATOR,
+    photos:form.photos.map(p=>p.key), thumbs:form.photos.map(p=>p.thumb),
+  };
+  if(unit==='plants'){
+    const xs=form.ppp.map(toNum).filter(x=>x>0);
+    rec.pots=$('#obPots').value.trim()?toNum($('#obPots').value):'';
+    rec.plantsPerPot=xs.length?+mean(xs).toFixed(1):'';
+    if(rec.pots===''&&rec.plantsPerPot===''&&!rec.note&&!rec.photos.length){toast('Nothing filled in to save');return;}
+  }else{
+    rec.tubers=$('#obTubers').value.trim()?toNum($('#obTubers').value):'';
+    if(rec.tubers===''&&!rec.note&&!rec.photos.length){toast('Nothing filled in to save');return;}
+  }
+  await DB.set('obs',null,rec);
+  form.photos=[];
+  const n=(await DB.all('obs')).length;
+  toast('Observation saved · queue: '+n);
+  back();refreshHome();
+};
+
+/* ---------- queue ---------- */
+async function buildQueue(){
+  const list=$('#queueList');list.innerHTML='';
+  const items=(await DB.all('obs')).sort((a,b)=>String(b.dateLogged).localeCompare(String(a.dateLogged)));
+  $('#queueEmpty').style.display=items.length?'none':'block';
+  for(const o of items){
+    const item=el('div',{className:'list-item'});const g=el('div',{className:'grow'});
+    const bits=[];
+    if(o.pots!=='')bits.push(o.pots+' pots');
+    if(o.plantsPerPot!=='')bits.push(o.plantsPerPot+' pl/pot');
+    if(o.tubers!=='')bits.push(o.tubers+' tubers');
+    if(o.status)bits.push(o.status);
+    if((o.photos||[]).length)bits.push((o.photos||[]).length+' photo');
+    g.append(el('div',{className:'t',textContent:o.subId+'  ·  '+o.step}),el('div',{className:'s',textContent:[o.variety,o.week,bits.join(' · ')].filter(Boolean).join(' — ')}));
+    const del=el('button',{className:'btn ghost sm',textContent:'🗑',onclick:async()=>{if(confirm('Delete observation?')){for(const k of (o.photos||[]))await DB.del('photos',k);await DB.del('obs',o.id);buildQueue();refreshHome();}}});
+    item.append(g,del);list.append(item);
+  }
+}
+
+/* ---------- export ---------- */
+const OBS_HEADERS=['Obs ID','Sub-batch ID','Parent Batch','Step Code','Count Year-Week','#Pots counted','Plants per pot counted','Tubers counted','Healthy %','Grade','Disease/Anomaly','Note','Date logged','Logged by','Client Key'];
+function csvEsc(v){v=(v==null?'':String(v));return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function buildObsCsv(items){
+  const lines=[OBS_HEADERS.join(',')];
+  for(const o of items){
+    const note=(o.status?('['+o.status+'] '):'')+(o.note||'');
+    lines.push(['',o.subId,o.parent,o.step,o.week,o.pots===''?'':o.pots,o.plantsPerPot===''?'':o.plantsPerPot,o.tubers===''?'':o.tubers,'','','',note,o.dateLogged,o.loggedBy,o.clientKey].map(csvEsc).join(','));
+  }
+  return '﻿'+lines.join('\r\n')+'\r\n';
+}
+function photoName(o,idx){return sanitize(o.subId)+'_'+sanitize(o.step)+'_'+fmtYMD(new Date(o.dateLogged.replace(' ','T')))+'_'+idx+'.jpg';}
+function stamp(){const n=new Date();return ''+n.getFullYear()+pad(n.getMonth()+1)+pad(n.getDate())+'_'+pad(n.getHours())+pad(n.getMinutes());}
+async function exportPackage(){
+  const items=(await DB.all('obs')).sort((a,b)=>String(a.dateLogged).localeCompare(String(b.dateLogged)));
+  if(!items.length){toast('Nothing to export');return;}
+  $('#btnExport').disabled=true;toast('Building package…');
+  try{
+    const who=sanitize(OPERATOR||'operator').replace(/ /g,'');
+    const csvName='observations_'+who+'_'+stamp()+'.csv';
+    const csvBlob=new Blob([buildObsCsv(items)],{type:'text/csv'});
+    const photoFiles=[];
+    for(const o of items){let i=1;for(const k of (o.photos||[])){const b=await DB.get('photos',k);if(b)photoFiles.push({name:photoName(o,i),data:new Uint8Array(await b.arrayBuffer())});i++;}}
+    const files=[new File([csvBlob],csvName,{type:'text/csv'})];
+    let zipBlob=null;
+    if(photoFiles.length){zipBlob=makeZip(photoFiles);files.push(new File([zipBlob],'photos_'+who+'_'+stamp()+'.zip',{type:'application/zip'}));}
+    if(navigator.canShare&&navigator.canShare({files})){
+      try{await navigator.share({files,title:'Calla observations'});afterExport(items,photoFiles.length,'shared');return;}
+      catch(e){if(e&&e.name==='AbortError'){toast('Sharing cancelled — queue kept');$('#btnExport').disabled=false;return;}}
+    }
+    downloadBlob(csvBlob,csvName);if(zipBlob)downloadBlob(zipBlob,'photos_'+who+'_'+stamp()+'.zip');
+    afterExport(items,photoFiles.length,'downloaded');
+  }catch(e){toast('Export failed: '+e.message);$('#btnExport').disabled=false;}
+}
+function afterExport(items,photoCount,how){
+  const clear=confirm('Exported ('+how+'): '+items.length+' observation(s), '+photoCount+' photos.\n\nClear the queue now?\n\nOK = clear · Cancel = keep');
+  (async()=>{if(clear){for(const o of items){for(const k of (o.photos||[]))await DB.del('photos',k);await DB.del('obs',o.id);}toast('Queue cleared');}else toast('Queue kept');$('#btnExport').disabled=false;refreshHome();})();
+}
+function downloadBlob(blob,name){const a=el('a',{href:URL.createObjectURL(blob),download:name});document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);}
+
+/* store-only ZIP */
+const CRC=(function(){const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+function crc32(b){let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRC[(c^b[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function makeZip(files){
+  const enc=new TextEncoder();const chunks=[],central=[];let off=0;
+  const u16=v=>[v&0xFF,(v>>8)&0xFF],u32=v=>[v&0xFF,(v>>8)&0xFF,(v>>16)&0xFF,(v>>24)&0xFF];
+  for(const f of files){const nb=enc.encode(f.name),d=f.data,crc=crc32(d);
+    chunks.push(new Uint8Array([].concat(u32(0x04034b50),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(d.length),u32(d.length),u16(nb.length),u16(0))));chunks.push(nb);chunks.push(d);
+    central.push(new Uint8Array([].concat(u32(0x02014b50),u16(20),u16(20),u16(0),u16(0),u16(0),u16(0),u32(crc),u32(d.length),u32(d.length),u16(nb.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(off))));central.push(nb);
+    off+=30+nb.length+d.length;}
+  const cs=off;let csz=0;central.forEach(c=>csz+=c.length);
+  const end=new Uint8Array([].concat(u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(csz),u32(cs),u16(0)));
+  return new Blob([...chunks,...central,end],{type:'application/zip'});
+}
+
+/* ---------- boot ---------- */
+(async function boot(){
+  try{await DB.open();
+    OPERATOR=(await DB.get('kv','operator'))||'';
+    DEVICE_ID=(await DB.get('kv','deviceId'))||'';
+    if(!DEVICE_ID){DEVICE_ID='dev'+Math.random().toString(36).slice(2,8);await DB.set('kv','deviceId',DEVICE_ID);}
+    await loadWorklistFromStore();
+  }catch(e){console.error(e);toast('Storage error: '+e.message);}
+  $('#verLabel').textContent='v'+APP_VERSION;
+  history.replaceState({s:'home'},'');
+  render('home');refreshHome();
+  window.__calla={loadWorklistText,buildObsCsv,stepsForSub,currentStepCode,DB,get WORKLIST(){return WORKLIST;},openSub,setOperator:async n=>{OPERATOR=n;await DB.set('kv','operator',n);}};
+})();
+</script>
+</body>
+</html>
