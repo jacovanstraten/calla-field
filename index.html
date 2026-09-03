@@ -3,22 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1f7a4d">
+<meta name="theme-color" content="#EC6608">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%23EC6608'/%3E%3Cpath d='M34 12 C21 6 9 15 10 27 C10.6 34 16 40 24 39 C18 35 16 29 20 23 C24 17 31 16 36 19 C39 15 38 13 34 12 Z' fill='%23fff'/%3E%3Cellipse cx='25.5' cy='27' rx='2.2' ry='6.2' fill='%23F6C544'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='11' fill='%23EC6608'/%3E%3Cpath d='M34 12 C21 6 9 15 10 27 C10.6 34 16 40 24 39 C18 35 16 29 20 23 C24 17 31 16 36 19 C39 15 38 13 34 12 Z' fill='%23fff'/%3E%3Cellipse cx='25.5' cy='27' rx='2.2' ry='6.2' fill='%23F6C544'/%3E%3C/svg%3E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Calla Field">
 <title>Calla Field App</title>
 <style>
   :root{
-    --green:#1f7a4d; --green-d:#155c39; --orange:#e8722b; --bg:#f6f7f5; --card:#fff;
-    --ink:#1c2321; --muted:#5d6b64; --line:rgba(0,0,0,.09); --danger:#c62828; --ok:#2e7d32; --warn:#b26a00;
-    --radius:14px;
+    --brand:#EC6608; --brand-d:#C0540A; --leaf:#2f9e5b; --leaf-d:#1f7a4d;
+    --green:#EC6608; --green-d:#C0540A; --orange:#EC6608;
+    --bg:#f7f6f4; --card:#fff; --ink:#1c2321; --muted:#5d6b64; --line:rgba(0,0,0,.09);
+    --danger:#c62828; --ok:#2e7d32; --warn:#b26a00; --radius:14px;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
   body{background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
   .app{max-width:640px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
-  header{position:sticky;top:0;z-index:20;background:var(--green);color:#fff;display:flex;align-items:center;gap:10px;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));box-shadow:0 1px 4px rgba(0,0,0,.15)}
-  header .back{background:transparent;border:0;color:#fff;font-size:24px;line-height:1;padding:2px 6px;cursor:pointer;display:none}
-  header h1{font-size:18px;margin:0;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .accent{height:5px;background:linear-gradient(90deg,var(--green),var(--orange))}
+  header{position:sticky;top:0;z-index:20;background:var(--brand);color:#fff;display:flex;align-items:center;gap:9px;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top));box-shadow:0 1px 4px rgba(0,0,0,.15)}
+  header .back{background:transparent;border:0;color:#fff;font-size:24px;line-height:1;padding:2px 4px;cursor:pointer;display:none}
+  header h1{font-size:18px;margin:0;font-weight:800;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
+  #logoMark{flex:0 0 auto}
+  .accent{height:5px;background:linear-gradient(90deg,var(--brand),var(--leaf))}
   main{flex:1;padding:16px;padding-bottom:calc(28px + env(safe-area-inset-bottom))}
   .screen{display:none}
   .screen.active{display:block;animation:fade .15s ease}
@@ -27,12 +34,12 @@
   h2.section{font-size:13px;margin:16px 2px 8px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
   label{display:block;font-size:13px;color:var(--muted);margin:0 0 4px;font-weight:600}
   input,select,textarea{width:100%;font:inherit;padding:12px;border:1px solid #cbd2ce;border-radius:10px;background:#fff;color:var(--ink)}
-  input:focus,select:focus,textarea:focus{outline:2px solid var(--orange);outline-offset:-1px}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:-1px}
   textarea{min-height:64px;resize:vertical}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:700;cursor:pointer;background:var(--brand);color:#fff}
   .btn:active{transform:translateY(1px)}
-  .btn.secondary{background:#fff;color:var(--green-d);border:1.5px solid var(--green)}
-  .btn.ghost{background:#eaeeec;color:var(--ink)}
+  .btn.secondary{background:#fff;color:var(--brand-d);border:1.5px solid var(--brand)}
+  .btn.ghost{background:#eeeae6;color:var(--ink)}
   .btn.hero{padding:20px 16px;font-size:20px;flex-direction:column;gap:2px}
   .btn.hero small{font-weight:500;font-size:12px;opacity:.9}
   .btn.sm{width:auto;padding:9px 12px;font-size:14px;border-radius:10px}
@@ -47,7 +54,7 @@
   .banner.warn{background:#fff4e5;color:#7a4f00;border:1px solid #ffcf9e}
   .banner.info{background:#e8f4ee;color:#0d4a30;border:1px solid #a7d3bc}
   .pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:12px;background:#eceff1;color:#607d8b}
-  .pill.plants{background:#e6f3ea;color:var(--green-d)}
+  .pill.plants{background:#e6f3ea;color:var(--leaf-d)}
   .pill.tubers{background:#fbe9dc;color:#a5521d}
   .sample{display:flex;gap:8px;align-items:center;margin:0 0 8px}
   .sample .idx{min-width:26px;color:var(--muted);font-size:13px;text-align:right}
@@ -55,15 +62,15 @@
   .stat{font-style:italic;font-size:14px;color:var(--muted);margin:4px 0 0}
   .stat.total{font-style:normal;font-weight:700;color:var(--ink)}
   .photos{display:flex;flex-wrap:wrap;gap:8px}
-  .thumb{width:92px;height:92px;border-radius:10px;object-fit:cover;border:1px solid var(--line)}
-  .addphoto{width:92px;height:92px;border-radius:10px;border:1.5px dashed var(--orange);background:#fdf5ef;color:var(--orange);font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .thumb{width:92px;height:92px;border-radius:10px;object-fit:cover;border:1px solid var(--line);cursor:pointer}
+  .addphoto{width:92px;height:92px;border-radius:10px;border:1.5px dashed var(--brand);background:#fdf3ec;color:var(--brand);font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer}
   .list-item{display:flex;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;margin:0 0 8px;background:#fff}
   .list-item .grow{flex:1;min-width:0}
   .list-item .t{font-weight:700}
   .list-item .s{font-size:13px;color:var(--muted)}
   .seg{display:flex;border:1px solid #cbd2ce;border-radius:10px;overflow:hidden}
   .seg button{flex:1;border:0;background:#fff;padding:10px 6px;font-weight:700;color:var(--muted);cursor:pointer;font-size:14px}
-  .seg button.on{background:var(--green);color:#fff}
+  .seg button.on{background:var(--brand);color:#fff}
   .ind{font-weight:700;font-size:14px}
   .ind.ok{color:var(--ok)} .ind.mid{color:var(--warn)} .ind.bad{color:var(--danger)}
   #camWrap,#scanWrap{position:fixed;inset:0;background:#000;z-index:50;display:none;flex-direction:column}
@@ -73,7 +80,17 @@
   .shutter{width:68px;height:68px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.4);cursor:pointer}
   .camclose{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;background:rgba(0,0,0,.5);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-size:15px;z-index:2;cursor:pointer}
   .scan-frame{position:absolute;top:0;left:0;right:0;bottom:80px;display:flex;align-items:center;justify-content:center;pointer-events:none}
-  .scan-frame .box{width:70vw;max-width:300px;height:70vw;max-height:300px;border:3px solid var(--orange);border-radius:18px;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  .scan-frame .box{width:70vw;max-width:300px;height:70vw;max-height:300px;border:3px solid var(--brand);border-radius:18px;box-shadow:0 0 0 100vmax rgba(0,0,0,.35)}
+  /* photo viewer */
+  #photoViewer{position:fixed;inset:0;background:#000;z-index:70;display:none;flex-direction:column}
+  #photoViewer.on{display:flex}
+  #photoViewer .pv-top{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top))}
+  #pvCount{color:#fff;font-size:14px;font-weight:600}
+  #pvStage{flex:1;overflow:hidden;position:relative;touch-action:none;display:flex;align-items:center;justify-content:center}
+  #pvImg{max-width:100%;max-height:100%;transform-origin:center center;will-change:transform;user-select:none;-webkit-user-drag:none}
+  #photoViewer .pv-bar{display:flex;gap:8px;justify-content:center;align-items:center;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));background:#000}
+  .pv-btn{background:rgba(255,255,255,.16);color:#fff;border:0;border-radius:10px;padding:11px 13px;font-size:14px;font-weight:600;cursor:pointer}
+  .pv-btn.danger{background:rgba(198,40,40,.92)}
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
   .modal.on{display:flex}
   .modal .box{background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:88vh;overflow:auto;padding:18px}
@@ -86,7 +103,12 @@
 <div class="app">
   <header>
     <button class="back" id="backBtn" aria-label="Back">‹</button>
-    <h1 id="title">Calla Field App</h1>
+    <svg id="logoMark" width="26" height="26" viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M34 10 C20 4 8 14 9 27 C9.6 35 16 41 24 40 C18 36 16 29 20 23 C24 17 31 16 36 19 C39 15 38 12 34 10 Z" fill="#fff"/>
+      <ellipse cx="25.5" cy="27" rx="2.3" ry="6.6" fill="#F6C544"/>
+      <path d="M20 34 C12 37 9 46 9 46 C18 45 22 39 22 34 Z" fill="#2F9E5B"/>
+    </svg>
+    <h1 id="title">Calla Field</h1>
     <button class="btn sm ghost" id="whoBtn" style="background:rgba(255,255,255,.16);color:#fff">👤</button>
   </header>
   <div class="accent"></div>
@@ -99,8 +121,10 @@
       <div class="card">
         <div class="row" style="justify-content:space-between">
           <div><b>Work-list</b><div class="s muted" id="wlStatus">Not loaded yet</div></div>
-          <button class="btn secondary sm" id="btnLoadWl">Load</button>
+          <button class="btn secondary sm" id="btnLoadWl">Load file</button>
         </div>
+        <div class="spacer"></div>
+        <button class="btn ghost sm" id="btnSample" style="width:100%">Use built-in sample list</button>
       </div>
       <button class="btn ghost" id="btnBrowse">📋 Pick sub-batch from list</button>
       <div class="spacer"></div>
@@ -113,7 +137,7 @@
       </div>
       <button class="btn secondary" id="btnExport">⬆︎ Export &amp; send</button>
       <div class="muted" id="exportNote" style="font-size:13px;margin:6px 2px"></div>
-      <p class="muted" style="font-size:12px;text-align:center;margin-top:22px">Calla Field App — preview (walking skeleton)<br><span id="verLabel"></span></p>
+      <p class="muted" style="font-size:12px;text-align:center;margin-top:22px">Calla Field App · Dümmen Orange — preview (walking skeleton)<br><span id="verLabel"></span></p>
     </section>
 
     <!-- SUB-BATCH + OBSERVATION -->
@@ -137,7 +161,6 @@
         <input id="obWeek" placeholder="2026-W25">
       </div>
 
-      <!-- plants block -->
       <div id="blkPlants" style="display:none">
         <h2 class="section">Count — plants</h2>
         <div class="card">
@@ -158,7 +181,6 @@
         </div>
       </div>
 
-      <!-- tubers block -->
       <div id="blkTubers" style="display:none">
         <h2 class="section">Count — tubers</h2>
         <div class="card">
@@ -183,6 +205,7 @@
       <h2 class="section">Photos <span class="pill" id="photoCount">0</span></h2>
       <div class="card">
         <div class="photos" id="photoStrip"><div class="addphoto" id="btnAddPhoto">＋</div></div>
+        <div class="s muted" style="margin-top:8px;font-size:12px">Tap a photo to view it full-screen, zoom, and keep or delete.</div>
       </div>
 
       <button class="btn" id="btnSaveObs">💾 Save observation</button>
@@ -203,13 +226,11 @@
   </main>
 </div>
 
-<!-- photo camera -->
 <div id="camWrap">
   <button class="camclose" id="camClose">✕ Close</button>
   <video id="camVideo" autoplay playsinline muted></video>
   <div class="cambar"><button class="shutter" id="camShutter" aria-label="Photo"></button></div>
 </div>
-<!-- scan camera -->
 <div id="scanWrap">
   <button class="camclose" id="scanClose">✕ Close</button>
   <video id="scanVideo" autoplay playsinline muted></video>
@@ -219,8 +240,24 @@
     <button class="btn ghost sm" id="scanManual">Enter code manually</button>
   </div>
 </div>
-<!-- hidden native camera fallback -->
 <input id="nativeCam" type="file" accept="image/*" capture="environment" style="display:none">
+
+<!-- photo viewer -->
+<div id="photoViewer">
+  <div class="pv-top">
+    <button class="pv-btn" id="pvClose">✕ Keep &amp; close</button>
+    <span id="pvCount"></span>
+    <button class="pv-btn danger" id="pvDelete">🗑 Delete</button>
+  </div>
+  <div id="pvStage"><img id="pvImg" alt=""></div>
+  <div class="pv-bar">
+    <button class="pv-btn" id="pvPrev">‹</button>
+    <button class="pv-btn" id="pvZoomOut">－</button>
+    <button class="pv-btn" id="pvReset">100%</button>
+    <button class="pv-btn" id="pvZoomIn">＋</button>
+    <button class="pv-btn" id="pvNext">›</button>
+  </div>
+</div>
 
 <!-- who modal -->
 <div class="modal" id="whoModal">
@@ -238,7 +275,8 @@
 
 <script>
 "use strict";
-const APP_VERSION='2026-09-03 · skeleton r2';
+const APP_VERSION='2026-09-03 · skeleton r3';
+const SAMPLE_WORKLIST="\ufeffSub-batch ID,Parent Batch,Variety Name,Type,Origin Step,Product Form,Eye Type,Background,#Pots,Plant Density,#Plants (P0),MF,Planting Year-Week,Status\n1-2027-01,1-2027,Arabian Night,Regular,E11,P1,Central,ET,428,,23968,4.559,2026-W26,Active\n1-2027-02,1-2027,Arabian Night,Regular,E11,P1,Lateral,ET,3561,,199416,4.559,2026-W31,Active\n2-2027-01,2-2027,Djembe,Regular,E11,P1,Central,ET,1381,,77336,2.447,2026-W25,Active\n2-2027-02,2-2027,Djembe,Regular,E11,P1,Lateral,ET,1998,,111888,2.447,2026-W30,Active\n4-2027-01,4-2027,Fantasia,Regular,E11,P1,Central,ET,900,,50400,4.939,2026-W26,Active\n4-2027-02,4-2027,Fantasia,Regular,E11,P1,Lateral,ET,2290,,128240,4.939,2026-W31,Active\n5-2027-01,5-2027,Gold Label,Regular,E11,P1,Central,ET,844,,47264,3.971,2026-W25,Active\n5-2027-02,5-2027,Gold Label,Regular,E11,P1,Lateral,ET,1955,,109480,3.971,2026-W30,Active\n7-2027-01,7-2027,Manila,Regular,E11,P1,Central,ET,153,,8568,2.106,2026-W26,Active\n7-2027-02,7-2027,Manila,Regular,E11,P1,Lateral,ET,2042,,114352,2.106,2026-W32,Active\n14-2027-01,14-2027,White Mambo,Regular,E11,P1,Central,ET,1743,,97608,3.766,2026-W25,Active\n14-2027-02,14-2027,White Mambo,Regular,E11,P1,Lateral,ET,2696,,150976,3.766,2026-W30,Active\n16-2027-01,16-2027,Rhythm,Regular,EE7,T2,Central,ET,1703,,95368,8.545,2026-W26,Active\n16-2027-02,16-2027,Rhythm,Regular,EE7,T2,Lateral,ET,3,,168,8.545,2026-W26,Active\n3-2027-01,3-2027,Proud Mary,Regular,E11,P1,Central,ET,30,,1680,3.916,2026-W26,Active\n3-2027-02,3-2027,Proud Mary,Regular,E11,P1,Lateral,ET,127,,7112,3.916,2026-W31,Active\n8-2027-01,8-2027,Monte Carlo,Regular,E11,P1,Central,ET,1164,,65184,3.798,2026-W26,Active\n8-2027-02,8-2027,Monte Carlo,Regular,E11,P1,Lateral,ET,1611,,90216,3.798,2026-W32,Active\n10-2027-01,10-2027,Pink Harmony,Regular,E11,\"P1, T2\",Central,ET,2768,,155008,3.951,2026-W25,Active\n10-2027-02,10-2027,Pink Harmony,Regular,E11,\"P1, T2\",Lateral,ET,620,,34720,3.951,2026-W30,Active\n11-2027-01,11-2027,Red Salsa,Regular,E11,P1,Central,ET,701,,39256,5.89,2026-W25,Active\n11-2027-02,11-2027,Red Salsa,Regular,E11,P1,Lateral,ET,2099,,117544,5.89,2026-W30,Active\n12-2027-01,12-2027,Red Symphony,Regular,E11,P1,Central,ET,1297,,72632,5.184,2026-W26,Active\n12-2027-02,12-2027,Red Symphony,Regular,E11,P1,Lateral,ET,2735,,153160,5.184,2026-W32,Active\n13-2027-01,13-2027,Serenade,Regular,E11,P1,Central,ET,1446,,80976,5.002,2026-W26,Active\n13-2027-02,13-2027,Serenade,Regular,E11,P1,Lateral,ET,2108,,118048,5.002,2026-W31,Active\n35-2027-01,35-2027,Whitehorse,Regular,E11,P1,Central,ET,2015,,112840,3.715,2026-W26,Active\n35-2027-02,35-2027,Whitehorse,Regular,E11,P1,Lateral,ET,3791,,212296,3.715,2026-W32,Active\n15-2027-01,15-2027,Z407,Regular,EE7,T2,Central,ET,177,,9912,3.965,2026-W26,Active\n17-2027-01,17-2027,Dancing Queen,Regular,E11,P1,Central,ET,91,,5096,3.791,2026-W26,Active\n17-2027-02,17-2027,Dancing Queen,Regular,E11,P1,Lateral,ET,432,,24192,3.791,2026-W31,Active\n18-2027-01,18-2027,Z646,Regular,E11,P1,Central,ET,63,,3528,4.365,2026-W26,Active\n18-2027-02,18-2027,Z646,Regular,E11,P1,Lateral,ET,353,,19768,4.365,2026-W31,Active\n19-2027-01,19-2027,ZD19-K0034,TV,E11,P1-TV,Central,ET,17,,952,3.388,2026-W26,Active\n20-2027-01,20-2027,ZD21-0420,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",21,,1176,6.837,2026-W26,Active\n24-2027-01,24-2027,ZG19-K0107,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",23,,1288,4.351,2026-W26,Active\n25-2027-01,25-2027,ZS-1329,TV,E11,P1-TV,Central,ET,28,,1568,4.752,2026-W26,Active\n27-2027-01,27-2027,ZS15-K1444,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",45,,2520,7.019,2026-W26,Active\n28-2027-01,28-2027,ZS16-K0059,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",40,,2240,6.154,2026-W26,Active\n30-2027-01,30-2027,ZS16-K0279,TV,E11,P1-TV,Central,ET,3,,168,1.714,2026-W26,Active\n29-2027-01,29-2027,ZS16-K0221,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",49,,2744,7.686,2026-W26,Active\n31-2027-01,31-2027,ZS18-K0160,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",56,,3136,7.879,2026-W26,Active\n32-2027-01,32-2027,ZS19-K0080,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",47,,2632,6.63,2026-W26,Active\n33-2027-01,33-2027,ZS19-K0270,TV,EE7,\"T2, T1-TV\",Central,\"ET (T2), NL (T1)\",62,,3472,9.409,2026-W26,Active\n38-2027-01,38-2027,ZD20-K0155,TV,SEE3,T1-TV,Central,NL,76,,4256,4.682,2026-W26,Active\n44-2027-01,44-2027,ZS10-K0046,TV,SEE3,T1-TV,Central,NL,69,,3864,3.591,2026-W26,Active\n45-2027-01,45-2027,ZS14-K0387,TV,SEE3,T1-TV,Central,NL,97,,5432,6.222,2026-W26,Active\n36-2027-01,36-2027,ZS16-K0130,TV,SEE3,T1-TV,Central,NL,86,,4816,7.502,2026-W26,Active\n39-2027-01,39-2027,ZS17-K0066,TV,SEE3,T1-TV,Central,NL,120,,6720,5.35,2026-W26,Active\n47-2027-01,47-2027,ZS18-K0239,TV,SEE3,T1-TV,Central,NL,83,,4648,7.851,2026-W26,Active\n42-2027-01,42-2027,ZS19-K0366,TV,SEE3,T1-TV,Central,NL,48,,2688,6.621,2026-W26,Active\n,,ZS18-K0005,TV,SEE3,T1-TV,Central,NL,46,,2576,8.178,2026-W26,Active\n9-2027-01,9-2027,Morning Sun,Regular,E11,P1,Central,ET,1276,,71456,,2026-W25,Active\n9-2027-02,9-2027,Morning Sun,Regular,E11,P1,Lateral,ET,4657,,260792,,2026-W25,Active\n9-2027-03,9-2027,Morning Sun,Regular,T1,T1,n.a.,NL,102,56,5712,,2026-W25,Active\n9-2027-04,9-2027,Morning Sun,Regular,T2,T2,n.a.,ET,3179,56,178024,,2026-W25,Active\n1-2028-01,1-2028,Arabian Night,Regular,EE7,T2,Central,NL,367,9,3303,10,2026-W05,Active\n2-2028-01,2-2028,Djembe,Regular,EE7,T2,,NL,2587,1,2587,10,2026-W05,Active\n4-2028-01,4-2028,Fantasia,Regular,EE7,T2,,NL,2673,1,2673,10,2026-W05,Active\n5-2028-01,5-2028,Gold Label,Regular,EE7,T2,,NL,1019,1,1019,10,2026-W05,Active\n7-2028-01,7-2028,Manila,Regular,EE7,T2,,NL,1883,1,1883,10,2026-W05,Active\n14-2028-01,14-2028,White Mambo,Regular,EE7,T2,,NL,4906,1,4906,10,2026-W05,Active\n15-2028-01,15-2028,Z407,Regular,EE7,T2,,NL,1977,1,1977,10,2026-W05,Active\n0009-2028-01,0009-2028,Z505,,EE7,T2,,NL,5384,1,5384,10,2026-W05,Active\n0010-2028-01,0010-2028,Sweet Symphony,,EE7,T2,,NL,1656,1,1656,10,2026-W05,Active\n7-2028-02,7-2028,Manila,Regular,EE7,T2,,ET,410,1,410,10,2026-W05,Active\n14-2028-02,14-2028,White Mambo,Regular,EE7,T2,,ET,2464,1,2464,10,2026-W05,Active\n4-2028-02,4-2028,Fantasia,Regular,EE7,T1,,,4949,1,4949,10,2026-W18,Active\n6-2028-01,6-2028,Kunming,Regular,EE7,T1,,,2518,1,2518,10,2026-W18,Active\n7-2028-03,7-2028,Manila,Regular,EE7,T1,,,5109,1,5109,10,2026-W18,Active\nUNALLOC-0004,,Orange Blend,Regular,SEE3,T1,,,1347,1,1347,,2026-W18,Unallocated\n10-2028-01,10-2028,Pink Harmony,Regular,SEE3,T1,,,10290,1,10290,,2026-W18,Active\n13-2028-01,13-2028,Serenade,Regular,EE7,T1,,,2499,1,2499,10,2026-W18,Active\nUNALLOC-0007,,Sweet symphony,Regular,SEE3,T1,,,2527,1,2527,,2026-W18,Unallocated\nUNALLOC-0008,,Tokyo,Regular,SEE3,T1,,,4998,1,4998,,2026-W18,Unallocated\nUNALLOC-0009,,Z965,TV,SEE3,T1,,,78,1,78,,2026-W18,Unallocated\nUNALLOC-0010,,ZD20-K0374,TV,SEE3,T1,,,196,1,196,,2026-W18,Unallocated\nUNALLOC-0011,,ZD20-K0388,TV,SEE3,T1,,,109,1,109,,2026-W18,Unallocated\nUNALLOC-0012,,ZD20-K0398,TV,SEE3,T1,,,221,1,221,,2026-W18,Unallocated\nUNALLOC-0013,,ZD20-K0412,TV,SEE3,T1,,,98,1,98,,2026-W18,Unallocated\nUNALLOC-0014,,ZD22-0379,TV,SEE3,T1,,,77,1,77,,2026-W18,Unallocated\n15-2028-02,15-2028,Z407,Regular,EE7,T1,,,1054,1,1054,10,2026-W18,Active\nUNALLOC-0016,,Dancing Queen,Regular,SEE3,T1,,,1296,1,1296,,2026-W18,Unallocated\n18-2028-01,18-2028,Z646,Regular,EE7,T1,,,1308,1,1308,10,2026-W18,Active\nUNALLOC-0018,,Z705,TV,SEE3,T1,,,20,1,20,,2026-W18,Unallocated\nUNALLOC-0019,,ZS17-K0014,TV,SEE3,T1,,,98,1,98,,2026-W18,Unallocated\nUNALLOC-0020,,ZS18-K0773,TV,SEE3,T1,,,98,1,98,,2026-W18,Unallocated\nUNALLOC-0021,,ZS19-K0525,TV,SEE3,T1,,,119,1,119,,2026-W18,Unallocated\nUNALLOC-0022,,ZS19-K0750,TV,SEE3,T1,,,98,1,98,,2026-W18,Unallocated\nUNALLOC-0023,,ZS19-K0762,TV,SEE3,T1,,,167,1,167,,2026-W18,Unallocated\nUNALLOC-0024,,ZD19-K0034,TV,E11,P1,,ET,619,1,619,,,Unallocated\nUNALLOC-0025,,ZD21-0420,TV,SEE3,T1,,NL,1064,1,1064,,,Unallocated\nUNALLOC-0026,,ZG19-K0107,TV,SEE3,T1,,NL,1008,1,1008,,,Unallocated\nUNALLOC-0027,,ZS-1329,TV,E11,P1,,ET,1019,1,1019,,,Unallocated\nUNALLOC-0028,,ZS15-K1444,TV,SEE3,T1,,NL,2240,1,2240,,,Unallocated\nUNALLOC-0029,,ZS16-K0059,TV,SEE3,T1,,NL,2016,1,2016,,,Unallocated\nUNALLOC-0030,,ZS16-K0279,TV,E11,P1,,ET,109,1,109,,,Unallocated\nUNALLOC-0031,,ZS16-K0221,TV,SEE3,T1,,NL,2520,1,2520,,,Unallocated\nUNALLOC-0032,,ZS18-K0160,TV,SEE3,T1,,NL,2744,1,2744,,,Unallocated\nUNALLOC-0033,,ZS19-K0080,TV,SEE3,T1,,NL,2352,1,2352,,,Unallocated\nUNALLOC-0034,,ZS19-K0270,TV,SEE3,T1,,NL,2856,1,2856,,,Unallocated\nUNALLOC-0035,,ZD20-K0155,TV,SEE3,T1,,NL,4256,1,4256,,,Unallocated\nUNALLOC-0036,,ZS10-K0046,TV,SEE3,T1,,NL,3864,1,3864,,,Unallocated\nUNALLOC-0037,,ZS14-K0387,TV,SEE3,T1,,NL,5432,1,5432,,,Unallocated\nUNALLOC-0038,,ZS16-K0130,TV,SEE3,T1,,NL,4816,1,4816,,,Unallocated\nUNALLOC-0039,,ZS17-K0066,TV,SEE3,T1,,NL,6720,1,6720,,,Unallocated\nUNALLOC-0040,,ZS18-K0239,TV,SEE3,T1,,NL,4648,1,4648,,,Unallocated\nUNALLOC-0041,,ZS19-K0366,TV,SEE3,T1,,NL,2688,1,2688,,,Unallocated\nUNALLOC-0042,,ZS18-K0005,TV,SEE3,T1,,NL,2576,1,2576,,,Unallocated\n";
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s);
@@ -273,8 +311,6 @@ const REG_STEPS=[
 ];
 const REG_INDEX=new Map(REG_STEPS.map((s,i)=>[s.code,i]));
 const STEP_DUR={SEE1:1,SEE2:19,SEE3:7,EE4:7,EE5:0,EE6:19,EE7:9,E8:7,E9:0,E10:19,E11:9,E12:1};
-// Capture window per origin / product form. P1-recycle re-enters at the PLANTING step E10
-// (not at its harvest step E11), so the observable window is E10 → E11 → E12.
 const ORIGIN_WINDOW={
   'E11':['E10','E11','E12'], 'P1':['E10','E11','E12'],
   'EE7':['EE7','E8','E9','E10','E11','E12'], 'T2':['EE7','E8','E9','E10','E11','E12'],
@@ -283,13 +319,12 @@ const ORIGIN_WINDOW={
 };
 function stepsForSub(sub){
   const type=(sub.type||'').toUpperCase();
-  if(type==='TV') return null; // TV: generic entry in this skeleton
+  if(type==='TV') return null;
   const o=(sub.originStep||'').toUpperCase().trim();
   let codes=ORIGIN_WINDOW[o];
   if(!codes){ codes = REG_INDEX.has(o) ? REG_STEPS.slice(REG_INDEX.get(o)).map(s=>s.code) : REG_STEPS.map(s=>s.code); }
   return codes.map(c=>REG_STEPS[REG_INDEX.get(c)]);
 }
-// Estimate the current step from the window start week + step durations.
 function currentStepCode(sub,steps){
   if(!steps||!steps.length)return '';
   const start=weekNum(sub.week); if(start==null)return steps[0].code;
@@ -369,12 +404,13 @@ async function loadWorklistFromStore(){const s=await DB.get('kv','worklist');if(
 
 /* ---------- nav ---------- */
 const stack=['home'];
-const TITLES={home:'Calla Field App',sub:'Observation',browse:'Sub-batches',queue:'Queue'};
-function render(name){$$('.screen').forEach(s=>s.classList.remove('active'));const scr=$('#screen-'+name);if(scr)scr.classList.add('active');$('#title').textContent=TITLES[name]||'Calla';$('#backBtn').style.display=stack.length>1?'block':'none';$('#whoBtn').style.display=name==='home'?'block':'none';window.scrollTo(0,0);}
+const TITLES={home:'Calla Field',sub:'Observation',browse:'Sub-batches',queue:'Queue'};
+function render(name){$$('.screen').forEach(s=>s.classList.remove('active'));const scr=$('#screen-'+name);if(scr)scr.classList.add('active');$('#title').textContent=TITLES[name]||'Calla';$('#backBtn').style.display=stack.length>1?'block':'none';$('#logoMark').style.display=name==='home'?'':'none';$('#whoBtn').style.display=name==='home'?'block':'none';window.scrollTo(0,0);}
 function show(name,push=true){if(push&&stack[stack.length-1]!==name){stack.push(name);history.pushState({s:name},'');}render(name);}
 function back(){history.back();}
 $('#backBtn').onclick=back;
 window.addEventListener('popstate',()=>{
+  if($('#photoViewer').classList.contains('on')){pvClose();return;}
   if($('#camWrap').classList.contains('on')){closeCam();history.pushState({},'');return;}
   if($('#scanWrap').classList.contains('on')){stopScan();history.pushState({},'');return;}
   if($('#whoModal').classList.contains('on')){$('#whoModal').classList.remove('on');history.pushState({},'');return;}
@@ -392,6 +428,7 @@ async function refreshHome(){
   $('#warnBanner').innerHTML=OPERATOR?'':'<div class="banner warn">Enter your name first (👤 top right) — it is attached to every observation.</div>';
 }
 $('#btnLoadWl').onclick=()=>pickFile('.csv,text/csv',async f=>{if(await loadWorklistText(await f.text(),f.name)){toast('Work-list loaded');refreshHome();}});
+$('#btnSample').onclick=async()=>{if(await loadWorklistText(SAMPLE_WORKLIST,'built-in sample')){toast('Sample list loaded');refreshHome();}};
 $('#btnBrowse').onclick=()=>{if(!WORKLIST.rows.length){toast('Load a work-list first');return;}buildBrowse();show('browse');};
 $('#btnQueue').onclick=()=>{buildQueue();show('queue');};
 $('#btnExport').onclick=exportPackage;
@@ -523,7 +560,7 @@ $$('#obStatus button').forEach(b=>b.onclick=()=>setStatus(b.dataset.st));
 /* ---------- photos ---------- */
 function renderPhotos(){
   const strip=$('#photoStrip');strip.innerHTML='';
-  form.photos.forEach((p,i)=>{const img=el('img',{className:'thumb',src:p.thumb});img.onclick=()=>{if(confirm('Delete photo?')){DB.del('photos',p.key);form.photos.splice(i,1);renderPhotos();}};strip.append(img);});
+  form.photos.forEach((p,i)=>{const img=el('img',{className:'thumb',src:p.thumb});img.onclick=()=>openPhotoViewer(i);strip.append(img);});
   strip.append(el('div',{className:'addphoto',textContent:'＋',onclick:takePhoto}));
   $('#photoCount').textContent=form.photos.length;
 }
@@ -569,6 +606,34 @@ function drawOverlay(ctx,w,h){
   ctx.fillStyle='rgba(0,0,0,0.82)';ctx.fillRect(0,h-stripH,w,stripH);ctx.fillStyle='#fff';
   lines.forEach((ln,i)=>ctx.fillText(ln,padx,h-stripH+padx+i*lineH));
 }
+
+/* ---------- photo viewer (view / zoom / swipe / keep / delete) ---------- */
+let PV={idx:0,scale:1,tx:0,ty:0,url:null,ptrs:new Map(),d0:0,s0:1,lastTap:0,open:false};
+function pvApply(){$('#pvImg').style.transform='translate('+PV.tx+'px,'+PV.ty+'px) scale('+PV.scale+')';const r=$('#pvReset');if(r)r.textContent=Math.round(PV.scale*100)+'%';}
+async function openPhotoViewer(i){if(!form.photos.length)return;PV.idx=Math.max(0,Math.min(i,form.photos.length-1));PV.open=true;$('#photoViewer').classList.add('on');history.pushState({pv:1},'');await pvLoad();}
+async function pvLoad(){const p=form.photos[PV.idx];if(!p){pvClose();return;}if(PV.url){URL.revokeObjectURL(PV.url);PV.url=null;}let src=p.thumb;try{const blob=await DB.get('photos',p.key);if(blob){PV.url=URL.createObjectURL(blob);src=PV.url;}}catch(e){}$('#pvImg').src=src||'';PV.scale=1;PV.tx=0;PV.ty=0;pvApply();$('#pvCount').textContent=(PV.idx+1)+' / '+form.photos.length;}
+function pvClose(){PV.open=false;$('#photoViewer').classList.remove('on');if(PV.url){URL.revokeObjectURL(PV.url);PV.url=null;}}
+function pvZoom(f){PV.scale=Math.max(1,Math.min(6,PV.scale*f));if(PV.scale===1){PV.tx=0;PV.ty=0;}pvApply();}
+$('#pvClose').onclick=()=>history.back();
+$('#pvZoomIn').onclick=()=>pvZoom(1.4);
+$('#pvZoomOut').onclick=()=>pvZoom(1/1.4);
+$('#pvReset').onclick=()=>{PV.scale=1;PV.tx=0;PV.ty=0;pvApply();};
+$('#pvPrev').onclick=async()=>{if(PV.idx>0){PV.idx--;await pvLoad();}};
+$('#pvNext').onclick=async()=>{if(PV.idx<form.photos.length-1){PV.idx++;await pvLoad();}};
+$('#pvDelete').onclick=async()=>{const p=form.photos[PV.idx];if(!p)return;if(!confirm('Delete this photo?'))return;try{await DB.del('photos',p.key);}catch(e){}form.photos.splice(PV.idx,1);renderPhotos();if(!form.photos.length){history.back();return;}PV.idx=Math.min(PV.idx,form.photos.length-1);await pvLoad();};
+(function(){const stage=$('#pvStage');if(!stage)return;
+  stage.addEventListener('pointerdown',e=>{try{stage.setPointerCapture(e.pointerId);}catch(_){}
+    PV.ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(PV.ptrs.size===2){const p=[...PV.ptrs.values()];PV.d0=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);PV.s0=PV.scale;}
+    else{const now=Date.now();if(now-PV.lastTap<300){PV.scale=PV.scale>1?1:2.5;PV.tx=0;PV.ty=0;pvApply();}PV.lastTap=now;}});
+  stage.addEventListener('pointermove',e=>{if(!PV.ptrs.has(e.pointerId))return;
+    const prev=PV.ptrs.get(e.pointerId);const cur2={x:e.clientX,y:e.clientY};PV.ptrs.set(e.pointerId,cur2);
+    if(PV.ptrs.size===2){const p=[...PV.ptrs.values()];const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);
+      if(PV.d0>0){PV.scale=Math.max(1,Math.min(6,PV.s0*d/PV.d0));if(PV.scale===1){PV.tx=0;PV.ty=0;}pvApply();}}
+    else if(PV.scale>1){PV.tx+=cur2.x-prev.x;PV.ty+=cur2.y-prev.y;pvApply();}});
+  const up=e=>{PV.ptrs.delete(e.pointerId);if(PV.ptrs.size<2)PV.d0=0;};
+  stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+})();
 
 /* ---------- save observation ---------- */
 $('#btnSaveObs').onclick=async()=>{
@@ -687,7 +752,7 @@ function makeZip(files){
   $('#verLabel').textContent='v'+APP_VERSION;
   history.replaceState({s:'home'},'');
   render('home');refreshHome();
-  window.__calla={loadWorklistText,buildObsCsv,stepsForSub,currentStepCode,DB,get WORKLIST(){return WORKLIST;},openSub,setOperator:async n=>{OPERATOR=n;await DB.set('kv','operator',n);}};
+  window.__calla={loadWorklistText,buildObsCsv,stepsForSub,currentStepCode,DB,get WORKLIST(){return WORKLIST;},openSub,setOperator:async n=>{OPERATOR=n;await DB.set('kv','operator',n);},SAMPLE_WORKLIST};
 })();
 </script>
 </body>
