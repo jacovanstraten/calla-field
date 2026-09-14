@@ -1,7 +1,7 @@
 /* Calla Field App — offline service worker.
    Caches the app shell so it opens with NO internet after the first online load.
    Stale-while-revalidate: serve from cache instantly, refresh in the background. */
-const CACHE='calla-v8';
+const CACHE='calla-v10';
 const CORE=['./','./index.html','./manifest.webmanifest'];
 self.addEventListener('install',e=>{ self.skipWaiting(); e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).catch(()=>{})); });
 self.addEventListener('activate',e=>{ e.waitUntil((async()=>{ const ks=await caches.keys(); await Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k))); await self.clients.claim(); })()); });
